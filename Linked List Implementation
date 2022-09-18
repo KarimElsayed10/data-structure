@@ -1,0 +1,225 @@
+#include <iostream>
+using namespace std;
+class linkedList
+{
+private:
+    struct Node
+    {
+        int item;
+        Node *next;
+    };
+    Node *first, *last;
+    int length;
+public:
+    linkedList()
+    {
+        first = last = NULL;
+        length = 0;
+    }
+    bool isEmpty()
+    {
+        return length == 0;
+    }
+    void insertFirst(int element)
+    {
+        Node *newNode=new Node;
+        newNode->item=element;//15
+        if(length==0)
+        {
+            newNode->next=NULL;
+            first=last=newNode;
+        }
+        else
+        {
+            newNode->next=first;
+            first=newNode;
+        }
+        length++;
+    }
+    void insertEnd(int element)
+    {
+        Node *newNode=new Node;
+        newNode->item=element;
+        if(length==0)
+        {
+            newNode->next=NULL;
+            first=last=newNode;
+        }
+        else
+        {
+            last->next=newNode;
+            last=newNode;
+            last->next=NULL;
+        }
+        length++;
+    }
+    void insertCircular(int element)
+    {
+
+        Node *newNode=new Node;
+        newNode->item=element;
+        if(length==0)
+        {
+            newNode->next=NULL;
+            first=last=newNode;
+        }
+        else
+        {
+            newNode->next=first;
+            last->next=newNode;
+            last=newNode;
+        }
+        length++;
+
+    }
+    void insertAtPosition(int position,int element)
+    {
+        Node *newNode=new Node;
+        newNode->item=element;
+        Node *current=first;
+        if(position==0)
+        {
+            insertFirst(element);
+        }
+        else if(position==length)
+        {
+            insertEnd(element);
+        }
+        else
+        {
+            for(int i=1; i<position; i++)
+            {
+                current = current->next;
+            }
+            newNode->next=current->next;
+            current->next=newNode;
+            length++;
+        }
+
+    }
+
+    void print()
+    {
+        Node *current = first;
+        cout<<"[ ";
+        while (current != NULL&&current->item!=-1)
+        {
+            cout << current->item<<" ";
+            current = current->next;
+        }
+        cout<<"]"<<endl;
+    }
+    void removeFirst()
+    {
+        if(length==0)
+        {
+            cout<<"Linked list is Empty can not remove elements"<<endl;
+        }
+        else if(length==1)
+        {
+            delete first;
+            first=last=NULL;
+            length--;
+        }
+        else
+        {
+            Node *current=first;
+            first=first->next;
+            current->next=NULL;
+            delete current;
+            length--;
+        }
+    }
+    void removeLast()
+    {
+        if (length == 0)
+            cout << "Linked List is Empty" << endl;
+        else if (length == 1)
+        {
+            delete first;
+            last = first = NULL;
+            length--;
+        }
+        else
+        {
+            Node *current = first;
+            while(current->next!=last)
+            {
+                current = current->next;
+            }
+            last = current;
+            last->next = current->next=NULL;
+            delete current;
+            length--;
+        }
+    }
+    void reverseAtPosition(int position)//3
+    {
+        if(position==0)
+        {
+            removeFirst();
+        }
+        else if(position==length-1)
+        {
+            removeLast();
+        }
+        else
+        {
+            Node *prevese=first;
+            Node *Current=first->next;
+            for(int i=0; i<position-1; i++)
+            {
+                prevese=Current;
+                Current=Current->next;
+            }
+            prevese->next=Current->next;
+            Current->next=NULL;//note
+            delete Current;//note
+            length--;
+        }
+
+    }
+    void reverse()
+    {
+        Node *prev, *curr, *next;
+        prev = NULL;
+        curr = first;
+        next = curr->next;
+        while (next != NULL)
+        {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        first = prev;
+    }
+    void Search(int element)
+    {
+        Node *current = first;
+        int position = 0;
+        while (current != NULL)
+        {
+            if (current->item == element)
+            {
+                cout<<"The Element found in position :"<<position+1<<endl;
+                return;
+            }
+            current = current->next;
+            position++;
+        }
+        cout<<"The Element not found in linked list "<<endl;
+    }
+};
+int main()
+{
+
+    linkedList k;
+    k.insertEnd(40);
+    k.insertEnd(50);
+    k.insertEnd(60);
+    k.insertEnd(70);
+    k.Search(60);
+    k.print();
+
+}
